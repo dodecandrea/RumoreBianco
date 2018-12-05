@@ -1,6 +1,5 @@
 System system;
 
-PImage img;
 
 PFont font;
 float fontCorrection;
@@ -16,9 +15,6 @@ void setup() {
   halfWidth = width/2;
   halfHeight = height/2;
   
-  img = loadImage("nero.png");
-  img.resize(width, height);
-  img.filter(INVERT);
   font = createFont("Arial", halfWidth/4);
   textFont(font);
   fontCorrection = textAscent()*0.25;
