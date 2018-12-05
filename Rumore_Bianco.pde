@@ -27,7 +27,7 @@ void setup() {
   loadPixels();
   for(int y = 0; y < pixels.length; y++) {
     if(brightness(pixels[y]) > 128) {
-      points.add(new PVector(floor(y%img.width), floor(y/img.width)));
+      points.add(new PVector(floor(y%width), floor(y/width)));
     }
   }
   
