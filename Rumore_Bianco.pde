@@ -9,9 +9,11 @@ float halfWidth, halfHeight;
 int instantDistance;
 float RMSdistance;
 int max;
-int min; 
+int min;
 
-ArrayList<PVector> points;
+int counter;
+
+HashMap<Integer, ArrayList<PVector>> phrases;
 
 void setup() {
   String portName = Serial.list()[1];
@@ -23,32 +25,42 @@ void setup() {
   max = 140;
   min = 50;
   
-  size(1280, 720);
-  //fullScreen();
+  fullScreen();
   background(0);
   
   halfWidth = width/2;
   halfHeight = height/2;
   
-  font = createFont("Arial", halfWidth/4);
-  textFont(font);
+  //font = createFont("Arial", halfWidth/4);
+  //textFont(font);
+  textSize(halfWidth/4);
   fontCorrection = textAscent()*0.25;
   textAlign(CENTER, CENTER);
-
-  points = new ArrayList();
+  phrases = new HashMap();
+  phrases.put(0, new ArrayList());
+  counter = 0;
 
   background(0);
   text("Rumore Bianco", halfWidth, halfHeight);
   loadPixels();
   for(int y = 0; y < pixels.length; y++) {
     if(brightness(pixels[y]) > 128) {
-      points.add(new PVector(floor(y%width), floor(y/width)));
+      phrases.get(0).add(new PVector(floor(y%width), floor(y/width)));
+    }
+  }
+  
+  phrases.put(1, new ArrayList());
+  background(0);
+  text("Rumore nero", halfWidth, halfHeight);
+  loadPixels();
+  for(int y = 0; y < pixels.length; y++) {
+    if(brightness(pixels[y]) > 128) {
+      phrases.get(1).add(new PVector(floor(y%width), floor(y/width)));
     }
   }
   
   system = new System(3000);
   system.start();
-  
 }
 
 void draw() {
@@ -65,7 +77,6 @@ void draw() {
     } catch(Exception e) {}
   }
   RMSdistance += ((int)instantDistance - RMSdistance) * 0.1;
-  println(RMSdistance);
   background(249, 66, 58);
 
   for(Entity e : system.entities) {

@@ -5,8 +5,7 @@ public class System extends Thread{
   public System(int q) {
     entities = new ArrayList();
     for (int i = 0; i < q; i++) {
-      PVector obj = points.get((int)random(points.size()));
-      float a = random(TWO_PI);
+      PVector obj = phrases.get(0).get((int)random(phrases.get(0).size()));
       entities.add(new Entity(new PVector(random(width), random(height)), obj));
     }
     int times = (int)random(q/6);
@@ -24,16 +23,22 @@ public class System extends Thread{
       for(Entity e : entities) {
         e.update();
       }
-      if(add < millis) {
-        add += 30;
-      } else {
-        add = 0;
-        for(Entity e : entities) {
-          e.applyForce();
+      if(add > millis) {
+        counter ++;
+        ArrayList<Entity> entities = system.getEntities();
+        ArrayList<PVector> points = phrases.get(counter%phrases.size());
+        for(int i = 0; i < entities.size(); i++) {
+          entities.get(i).changeObjective(points.get((int)random(points.size()-1)));
         }
+        add = 0;
       }
+      add += 30;
       delay(30);
     }
+  }
+  
+  private ArrayList<Entity> getEntities() {
+    return entities;
   }
   
   ArrayList<Entity> entities;

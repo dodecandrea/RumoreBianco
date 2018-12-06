@@ -2,7 +2,6 @@ public class Entity {
   
   public Entity(PVector pos, PVector objective) {
     this.pos = pos;
-    vel = new PVector(0, 0);
     randVel = new PVector(0, 0);
     objVel = new PVector(0, 0);
     this.objective = objective;
@@ -34,17 +33,10 @@ public class Entity {
     
     dist.mult(objScaling);
     rndDist.mult(randScaling);
-    
-    //dist.mult(map(RMSdistance, min, max, 1.0f, 0.0f));
-    //rndDist.mult(map(RMSdistance, min, max, 0.0f, 1.0f));
     randVel = PVector.add(randVel, rndDist);
     objVel = PVector.add(objVel, dist);
     randVel.mult(map(RMSdistance, min, max, 0.0f, 1.0f));
     objVel.mult(map(RMSdistance, min, max, 1.0f, 0.0f));
-    
-    //vel.add(rndDist);
-    //vel.add(dist);
-    //vel.mult(momentum);
     
     pos.add(objVel);
     pos.add(randVel);
@@ -54,12 +46,15 @@ public class Entity {
     applyForce();
   }
   
+  public void changeObjective(PVector newObj) {
+    this.objective = newObj;
+  }
+  
   float randScaling;
   float objScaling;
   float randMomentum;
   float objMomentum;
   PVector pos;
-  PVector vel;
   PVector randVel;
   PVector objVel;
   PVector rnd;
