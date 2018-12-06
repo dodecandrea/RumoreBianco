@@ -3,10 +3,14 @@ public class Entity {
   public Entity(PVector pos, PVector objective) {
     this.pos = pos;
     vel = new PVector(0, 0);
+    randVel = new PVector(0, 0);
+    objVel = new PVector(0, 0);
     this.objective = objective;
     rnd = new PVector(random(width), random(height));
-    this.scaling = random(0.001, 0.0005);
-    this.momentum = random(0.99, 0.993);
+    this.randScaling = random(0.001, 0.0005);
+    this.objScaling = random(0.01, 0.005);
+    this.randMomentum = random(0.99, 0.993);
+    this.objMomentum = random(0.2, 0.2);
     pointsInSpace = new ArrayList();
     tail = new ArrayList();
   }
@@ -28,25 +32,36 @@ public class Entity {
     PVector rndDist = PVector.sub(rnd, pos);
     PVector dist = PVector.sub(objective, pos);
     
-    dist.mult(scaling);
-    rndDist.mult(scaling);
+    dist.mult(objScaling);
+    rndDist.mult(randScaling);
     
-    dist.mult(map(mouseX, 0, width, 0.0f, 1.0f));
-    rndDist.mult(map(mouseX, 0, width, 1.0f, 0.0f));
-    vel.add(rndDist);
-    vel.add(dist);
-    vel.mult(momentum);
-    pos.add(vel);
+    //dist.mult(map(RMSdistance, min, max, 1.0f, 0.0f));
+    //rndDist.mult(map(RMSdistance, min, max, 0.0f, 1.0f));
+    randVel = PVector.add(randVel, rndDist);
+    objVel = PVector.add(objVel, dist);
+    randVel.mult(map(RMSdistance, min, max, 0.0f, 1.0f));
+    objVel.mult(map(RMSdistance, min, max, 1.0f, 0.0f));
+    
+    //vel.add(rndDist);
+    //vel.add(dist);
+    //vel.mult(momentum);
+    
+    pos.add(objVel);
+    pos.add(randVel);
   }
   
   public void update() {
     applyForce();
   }
   
-  float scaling;
-  float momentum;
+  float randScaling;
+  float objScaling;
+  float randMomentum;
+  float objMomentum;
   PVector pos;
   PVector vel;
+  PVector randVel;
+  PVector objVel;
   PVector rnd;
   PVector objective;
   PVector other;
