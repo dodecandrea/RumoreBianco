@@ -25,10 +25,9 @@ public class System extends Thread{
       }
       if(add > millis) {
         counter ++;
-        ArrayList<Entity> entities = system.getEntities();
         ArrayList<PVector> points = phrases.get(counter%phrases.size());
         for(int i = 0; i < entities.size(); i++) {
-          entities.get(i).changeObjective(points.get((int)random(points.size()-1)));
+          entities.get(i).changeObjective(points.get((int)random(points.size())));
         }
         add = 0;
       }
